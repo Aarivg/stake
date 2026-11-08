@@ -13,7 +13,7 @@
     if (!ui.seek) ui.seek = { target: 50, roundId: null, varKey: '' };
     applyMode(mode);
     /* The plain link always opens on the cap table; only #challenge opens the challenge. */
-    if (location.hash !== '#challenge') ui.tab = 'cap';
+    ui.tab = location.hash === '#challenge' ? 'challenge' : 'cap';
     bumpIds();
     renderInputs(); renderOutputs(); renderScenarioSelect(); updateSaveUi(); histInit();
     if (location.hash === '#challenge') startChallenge();
