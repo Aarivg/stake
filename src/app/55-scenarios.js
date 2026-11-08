@@ -11,7 +11,7 @@
     const sv = state.savedId && saved.find(x => x.id === state.savedId);
     if (sv) return sv.name;
     if (state.preset && PRESETS[state.preset]) return PRESETS[state.preset].label;
-    return 'Shared scenario';
+    return 'Custom scenario';
   }
   function updateSaveUi() {
     const d = $('#dirty');
@@ -20,7 +20,7 @@
   function renderScenarioSelect() {
     const sv = state.savedId && saved.find(x => x.id === state.savedId);
     const curVal = sv ? 's:' + sv.id : state.preset && PRESETS[state.preset] ? 'p:' + state.preset : 'cur';
-    sel.innerHTML = (curVal === 'cur' ? '<option value="cur">Shared scenario</option>' : '') +
+    sel.innerHTML = (curVal === 'cur' ? '<option value="cur">Custom scenario</option>' : '') +
       `<optgroup label="Start from">${Object.entries(PRESETS).map(([k, p]) => `<option value="p:${k}">${esc(p.label)}</option>`).join('')}</optgroup>` +
       (saved.length ? `<optgroup label="Your scenarios">${saved.map(x => `<option value="s:${x.id}">${esc(x.name)}</option>`).join('')}</optgroup>` : '');
     sel.value = curVal;
