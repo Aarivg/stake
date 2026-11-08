@@ -8,7 +8,7 @@
 
 **[Open the live app →](https://aarivg.github.io/stake/)**
 
-![Stake: founders' ownership through each round](docs/screenshot.png)
+![30-second demo of Stake](docs/demo.gif)
 
 ## What it does
 
@@ -24,6 +24,8 @@
 | **Beginner and Pro views** | The app always opens in the Standard view. Beginner hides discounts, liquidation terms and anti-dilution until you use them. Pro adds a two-variable sensitivity table, a command palette (⌘K) and keyboard shortcuts (press ?). |
 
 Results come with plain-English explanations of what they mean for the founders, and the key terms have definitions one hover away. New to cap tables? Press **Learn the basics**. Know them cold? Switch to the **Pro** view and press **⌘K**.
+
+![Stake: founders' ownership through each round](docs/screenshot.png)
 
 ![Exit waterfall](docs/waterfall.png)
 
