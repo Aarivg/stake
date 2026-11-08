@@ -1,0 +1,12 @@
+/* Large screens: scale the whole app up instead of leaving wide empty margins.
+   --z is reused to keep the sticky inputs column within the viewport. */
+.app { max-width: 1360px; zoom: var(--z, 1); }
+.course { zoom: var(--z, 1); }
+.inputs { max-height: calc((100vh - 24px) / var(--z, 1)); }
+@media (min-width: 1560px) { :root { --z: 1.1; } }
+@media (min-width: 1760px) { :root { --z: 1.2; } }
+@media (min-width: 2000px) { :root { --z: 1.32; } }
+@media (min-width: 2300px) { :root { --z: 1.5; } }
+@media (min-width: 2700px) { :root { --z: 1.75; } }
+@media (min-width: 3200px) { :root { --z: 2; } }
+@media print { .app, .course { zoom: 1; } }
