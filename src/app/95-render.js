@@ -6,6 +6,7 @@
     const active = document.activeElement && document.activeElement.id;
     const caret = active && document.activeElement.selectionStart;
     document.body.classList.toggle('on-challenge', ui.tab === 'challenge');
+    if (ui.tab !== 'challenge' && location.hash === '#challenge') { try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { /* ignore */ } }
     { const tl = $('.tabs'), on = tl && tl.querySelector('[aria-selected="true"]'); if (on && tl.scrollWidth > tl.clientWidth) tl.scrollLeft = Math.max(0, on.offsetLeft - tl.offsetLeft - 16); }
     const errs = ui.tab === 'challenge' ? '' : (model.errors || []).map(x => ins(`<b>${esc(x.name)}:</b> ${esc(x.msg)} Results below stop before this round.`, 'crit', '!')).join('');
     v.innerHTML = errs + (ui.tab === 'exit' ? viewExit() : ui.tab === 'run' ? viewRun() : ui.tab === 'cmp' ? viewCompare() : ui.tab === 'challenge' ? viewChallenge() : viewCap());
