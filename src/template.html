@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stake Cap Table Simulator</title>
+<meta name="description" content="Model SAFEs, notes, priced rounds, the option pool shuffle, anti-dilution, liquidation preferences and runway. See what founders actually own and take home.">
+<meta name="author" content="Aariv Gupta">
+<meta name="theme-color" content="#0b5d47">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Stake: cap table, SAFE &amp; exit simulator">
+<meta property="og:description" content="See what founders actually own after SAFEs, priced rounds and the pool shuffle, and what they take home at exit.">
+<meta property="og:image" content="https://aarivg.github.io/stake/og-image.png">
+<meta property="og:url" content="https://aarivg.github.io/stake/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%230b5d47'/%3E%3Crect x='5' y='13' width='3' height='6' rx='1' fill='white'/%3E%3Crect x='10.5' y='9' width='3' height='10' rx='1' fill='white'/%3E%3Crect x='16' y='5' width='3' height='14' rx='1' fill='white'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/*STYLE*/
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><rect x="2" y="13" width="4" height="9" rx="1"/><rect x="8" y="8" width="4" height="14" rx="1"/><rect x="14" y="4" width="4" height="18" rx="1"/><rect x="20" y="2" width="2" height="20" rx="1" opacity=".45"/></svg></span>
+      <span class="word">Stake</span>
+      <span class="tag">Cap table, SAFE &amp; exit simulator</span>
+    </div>
+    <div class="actions">
+      <button class="btn learn" id="learnBtn" type="button">Learn the basics</button>
+      <div class="seg mode" role="group" aria-label="View"><button type="button" data-mode="beginner" aria-pressed="false" title="Hide advanced terms until you need them">Beginner</button><button type="button" data-mode="standard" aria-pressed="true" title="The full simulator">Standard</button><button type="button" data-mode="pro" aria-pressed="false" title="Adds a sensitivity table, command palette and shortcuts">Pro</button></div>
+      <label class="sel"><span class="sr">Scenario</span>
+        <select id="preset" aria-label="Choose a scenario"></select>
+      </label>
+      <span class="dirty" id="dirty" aria-live="polite"></span>
+      <button class="btn solid" id="saveBtn" type="button">Save scenario</button>
+      <button class="btn icon" id="undoBtn" type="button" aria-label="Undo" title="Undo (Ctrl/⌘ Z)" disabled>↶</button>
+      <button class="btn icon" id="redoBtn" type="button" aria-label="Redo" title="Redo (Ctrl/⌘ Shift Z)" disabled>↷</button>
+      <button class="btn ghost" id="copyLink" type="button">Copy share link</button>
+      <details class="more"><summary class="btn ghost">More</summary>
+        <div class="menu" role="menu">
+          <button type="button" role="menuitem" id="copyCsv">Copy cap table as CSV</button>
+          <button type="button" role="menuitem" id="exportJson">Export scenario (JSON)</button>
+          <button type="button" role="menuitem" id="importJson">Import scenario (JSON)</button>
+          <button type="button" role="menuitem" id="printBtn">Print or save as PDF</button>
+          <button type="button" role="menuitem" id="paletteBtn">Command palette <kbd>⌘K</kbd></button>
+          <button type="button" role="menuitem" id="keysBtn">Keyboard shortcuts <kbd>?</kbd></button>
+        </div>
+      </details>
+      <input type="file" id="importFile" accept="application/json,.json" hidden>
+    </div>
+  </header>
+
+  <section class="hero" id="hero"></section>
+
+  <div class="grid">
+    <aside class="inputs" id="inputs" aria-label="Inputs"></aside>
+    <main class="outputs">
+      <nav class="tabs" role="tablist" aria-label="Views">
+        <button role="tab" id="tab-cap" data-tab="cap" type="button">Cap table</button>
+        <button role="tab" id="tab-exit" data-tab="exit" type="button">Exit waterfall</button>
+        <button role="tab" id="tab-run" data-tab="run" type="button">Runway</button>
+        <button role="tab" id="tab-cmp" data-tab="cmp" type="button">Compare scenarios</button>
+      </nav>
+      <div id="view"></div>
+    </main>
+  </div>
+
+  <footer class="foot">
+    <p><strong>How the math works.</strong> Post-money SAFEs follow the YC post-money SAFE: the holder owns purchase amount ÷ cap of the company measured just before the new money, after the pool top-up and every other conversion. Pre-money SAFEs and notes price off the pre-money capitalization including the pool increase but excluding other convertibles. Notes accrue simple interest. An uncapped MFN SAFE takes the lowest cap and best discount of SAFEs listed below it (issued later), otherwise it converts at the round price. The option pool top-up sits in the pre-money, so existing holders absorb it. In the waterfall, granted options are treated as exercised (strike prices ignored), the unallocated pool gets nothing, and SAFE holders receive shadow preferred with a preference equal to the amount they converted. Non-participating preferred converts to common whenever that pays more.</p>
+    <p class="fine">For modelling and learning, not legal or investment advice. Real documents vary; check the conversion mechanics in yours. Scenarios you save stay in your browser.</p>
+    <p class="credit">Built by <a href="https://aarivg.com">Aariv Gupta</a> · <a href="https://github.com/Aarivg/stake">Source on GitHub</a></p>
+  </footer>
+</div>
+<aside class="course" id="course" aria-label="Cap table course" hidden></aside>
+<div class="scrim" id="scrim" hidden></div>
+<div class="palette" id="palette" role="dialog" aria-modal="true" aria-label="Command palette" hidden>
+  <input type="text" id="palIn" placeholder="Type a command: add SAFE, exit waterfall, export…" autocomplete="off" spellcheck="false" aria-controls="palList">
+  <ul id="palList" role="listbox"></ul>
+  <p class="pal-foot"><kbd>↑</kbd><kbd>↓</kbd> to move · <kbd>Enter</kbd> to run · <kbd>Esc</kbd> to close</p>
+</div>
+<div class="palette keys" id="keys" role="dialog" aria-modal="true" aria-labelledby="keysTitle" hidden>
+  <h3 id="keysTitle">Keyboard shortcuts</h3>
+  <dl>
+    <dt><kbd>⌘</kbd><kbd>K</kbd></dt><dd>Command palette</dd>
+    <dt><kbd>1</kbd>–<kbd>4</kbd></dt><dd>Switch tabs</dd>
+    <dt><kbd>⌘</kbd><kbd>S</kbd></dt><dd>Save scenario</dd>
+    <dt><kbd>⌘</kbd><kbd>Z</kbd> / <kbd>⇧</kbd><kbd>⌘</kbd><kbd>Z</kbd></dt><dd>Undo / redo</dd>
+    <dt><kbd>↑</kbd> <kbd>↓</kbd></dt><dd>Nudge a number field (hold <kbd>⇧</kbd> for bigger steps)</dd>
+    <dt><kbd>P</kbd></dt><dd>Turn Pro view on or off</dd>
+    <dt><kbd>?</kbd></dt><dd>This list</dd>
+    <dt><kbd>Esc</kbd></dt><dd>Close any dialog</dd>
+  </dl>
+  <p class="pal-foot">On Windows and Linux, use Ctrl instead of ⌘.</p>
+</div>
+<div class="pop" id="savePop" role="dialog" aria-modal="false" aria-labelledby="saveTitle" hidden>
+  <h3 id="saveTitle">Save scenario</h3>
+  <p class="hint">Saved in this browser only. Use Copy share link to send it to someone.</p>
+  <label class="field"><span>Name</span><input type="text" id="saveName" autocomplete="off" maxlength="60"></label>
+  <div class="pop-actions"><button class="btn solid" type="button" id="saveDo">Save</button><button class="btn" type="button" id="saveNew">Save as new</button><button class="btn ghost" type="button" id="saveCancel">Cancel</button></div>
+</div>
+<div class="tip" id="tip" role="status" aria-live="polite"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+/*ENGINE*/
+</script>
+<script>
+/*APP*/
+</script>
+</body>
+</html>
