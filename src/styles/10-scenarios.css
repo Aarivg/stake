@@ -1,0 +1,30 @@
+/* v2: scenarios, compare, goal seek */
+.dirty { font-size: 12px; color: var(--warn-ink); }
+.pop { position: fixed; z-index: 70; top: 70px; right: max(24px, calc((100vw - 1320px) / 2 + 24px)); width: min(360px, calc(100vw - 32px)); background: var(--sheet); border: 1px solid var(--rule); border-radius: 12px; padding: 16px; box-shadow: 0 16px 40px rgb(0 0 0 / .18); display: flex; flex-direction: column; gap: 10px; }
+.pop[hidden] { display: none; }
+.pop h3 { margin: 0; font-family: var(--font-display); font-size: 18px; font-variation-settings: "wdth" 85; }
+.pop .hint { margin: -6px 0 0; font-size: 12px; color: var(--muted); }
+.pop-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.intro { background: var(--accent-soft); border-color: transparent; }
+.intro p { margin: 0 0 10px; font-size: 13.5px; }
+.intro .actions { gap: 6px; }
+.seek-row { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: end; font-size: 14px; }
+.seek-row .field { flex: 0 1 auto; }
+.seek-row .w-pct { width: 116px; }
+.seek-row .w-sel { min-width: 150px; }
+.seek-out { margin-top: 12px; font-size: 14px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.seek-out b { font-family: var(--font-mono); }
+.cmp-pick { display: flex; flex-wrap: wrap; gap: 8px; }
+.cmp-pick label { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--rule); background: var(--sheet); border-radius: 999px; padding: 5px 12px 5px 9px; font-size: 13px; cursor: pointer; }
+.cmp-pick input { accent-color: var(--accent); }
+.cmp-pick .sw { width: 9px; height: 9px; border-radius: 50%; }
+.saved-list { display: flex; flex-direction: column; gap: 6px; margin: 8px 0 0; padding: 0; list-style: none; }
+.saved-list li { display: flex; align-items: center; gap: 10px; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--rule); font-size: 13.5px; }
+.saved-list li:last-child { border-bottom: 0; }
+.saved-list .meta { color: var(--muted); font-size: 12px; }
+.ledger td.best { font-weight: 600; color: var(--good-ink); }
+.ledger th.sc { text-align: right; }
+.empty { padding: 16px; border: 1px dashed var(--muted); border-radius: 10px; font-size: 14px; color: var(--ink-2); }
+.ledger.cmp th { white-space: normal; vertical-align: bottom; }
+.ledger.cmp td:first-child { min-width: 120px; }
+.ledger.cmp td, .ledger.cmp th { padding-left: 8px; padding-right: 10px; }
