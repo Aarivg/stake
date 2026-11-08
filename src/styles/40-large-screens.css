@@ -12,3 +12,12 @@
 @media (min-width: 2700px) { :root { --z: 1.75; } }
 @media (min-width: 3200px) { :root { --z: 2; } }
 @media print { .app, .course { zoom: 1; } }
+
+/* Founder challenge (#challenge link) */
+.challenge { background: var(--sheet); border: 2px solid var(--accent); border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; }
+.challenge .step { font: 500 11px var(--font-mono); color: var(--accent); letter-spacing: .08em; text-transform: uppercase; }
+.challenge h3 { margin: 0; font-family: var(--font-display); font-size: 26px; line-height: 1.12; letter-spacing: -0.015em; font-variation-settings: "wdth" 85; text-wrap: balance; }
+.challenge p { margin: 0; font-size: 14.5px; max-width: 70ch; }
+.challenge .win { color: var(--good-ink); }
+#exitBody.veiled { filter: blur(18px); opacity: .5; pointer-events: none; user-select: none; }
+@media (prefers-reduced-motion: no-preference) { #exitBody { transition: filter .35s ease; } }

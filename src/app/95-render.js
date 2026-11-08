@@ -46,6 +46,7 @@
   });
   $('#view').addEventListener('input', e => {
     const t = e.target;
+    if ((t.id === 'exitRange' || t.id === 'exitInput') && ui.challenge && !ui.challenge.revealed) ui.challenge.revealed = true;
     if (t.id === 'exitRange') {
       const sc = exitScale(model.stages[exitIdx()]);
       const f = +t.value / 1000, raw = sc.xmax * f * f;
