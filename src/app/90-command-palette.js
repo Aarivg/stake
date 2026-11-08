@@ -10,6 +10,7 @@
     c.push({ g: 'Tools', t: 'Sensitivity table', run: () => { applyMode('pro'); switchTab('cap'); const el = $('#sensCard'); if (el) el.scrollIntoView({ block: 'start' }); } });
     c.push({ g: 'Learn', t: 'Take the 8-lesson course', run: () => startCourse() });
     [['beginner', 'Beginner'], ['standard', 'Standard'], ['pro', 'Pro']].filter(([m]) => m !== mode).forEach(([m, t]) => c.push({ g: 'View', t: `Switch to ${t} view`, k: m === 'pro' ? 'P' : '', run: () => applyMode(m, true) }));
+    THEMES.filter(t => t !== theme).forEach(t => c.push({ g: 'Theme', t: `Switch to ${THEME_LABEL[t].toLowerCase() === 'match my device' ? 'device' : THEME_LABEL[t].toLowerCase()} theme`, k: 'T', run: () => applyTheme(t, true) }));
     c.push({ g: 'Scenario', t: 'Save scenario', k: '⌘S', run: openSave });
     c.push({ g: 'Scenario', t: 'Start blank', run: () => loadPreset('blank') });
     Object.entries(PRESETS).filter(([k]) => k !== 'blank').forEach(([k, p]) => c.push({ g: 'Example', t: p.label, run: () => loadPreset(k) }));
@@ -71,4 +72,5 @@
     if (e.key === '?') { e.preventDefault(); openKeys(); }
     else if (['1', '2', '3', '4'].includes(e.key)) switchTab(['cap', 'exit', 'run', 'cmp'][+e.key - 1]);
     else if (k === 'p') applyMode(mode === 'pro' ? 'standard' : 'pro', true);
+    else if (k === 't') nextTheme();
   });

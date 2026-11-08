@@ -362,6 +362,8 @@ table.sens td.cur { outline: 2px solid var(--ink); outline-offset: -2px; font-we
 @media (max-width: 560px) { .course { right: 8px; left: 8px; bottom: 8px; width: auto; max-height: 52vh; } }
 @media print { .course, .palette, .scrim, .learn, .mode { display: none !important; } }
 
+#themeBtn { display: inline-grid; place-items: center; }
+
 /* Large screens: scale the whole app up instead of leaving wide empty margins.
    --z is reused to keep the sticky inputs column within the viewport. */
 .app { max-width: 1360px; zoom: var(--z, 1); }
@@ -393,6 +395,7 @@ table.sens td.cur { outline: 2px solid var(--ink); outline-offset: -2px; font-we
       </label>
       <span class="dirty" id="dirty" aria-live="polite"></span>
       <button class="btn solid" id="saveBtn" type="button">Save scenario</button>
+      <button class="btn icon" id="themeBtn" type="button" aria-label="Color theme"></button>
       <button class="btn icon" id="undoBtn" type="button" aria-label="Undo" title="Undo (Ctrl/⌘ Z)" disabled>↶</button>
       <button class="btn icon" id="redoBtn" type="button" aria-label="Redo" title="Redo (Ctrl/⌘ Shift Z)" disabled>↷</button>
       <button class="btn ghost" id="copyLink" type="button">Copy share link</button>
@@ -447,6 +450,7 @@ table.sens td.cur { outline: 2px solid var(--ink); outline-offset: -2px; font-we
     <dt><kbd>⌘</kbd><kbd>Z</kbd> / <kbd>⇧</kbd><kbd>⌘</kbd><kbd>Z</kbd></dt><dd>Undo / redo</dd>
     <dt><kbd>↑</kbd> <kbd>↓</kbd></dt><dd>Nudge a number field (hold <kbd>⇧</kbd> for bigger steps)</dd>
     <dt><kbd>P</kbd></dt><dd>Turn Pro view on or off</dd>
+    <dt><kbd>T</kbd></dt><dd>Change color theme</dd>
     <dt><kbd>?</kbd></dt><dd>This list</dd>
     <dt><kbd>Esc</kbd></dt><dd>Close any dialog</dd>
   </dl>
@@ -1823,6 +1827,35 @@ table.sens td.cur { outline: 2px solid var(--ink); outline-offset: -2px; font-we
     n.focus(); n.click();
   });
 
+  /* ---------- color theme: system, light or dark ---------- */
+  const TKEY = 'stake.theme';
+  const THEMES = ['system', 'light', 'dark'];
+  const THEME_ICON = {
+    system: '<svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>',
+    light: '<svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></g></svg>',
+    dark: '<svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" fill="currentColor"/></svg>'
+  };
+  const THEME_LABEL = { system: 'Match my device', light: 'Light', dark: 'Dark' };
+  let theme = (() => { try { const t = localStorage.getItem(TKEY); return THEMES.includes(t) ? t : 'system'; } catch (e) { return 'system'; } })();
+  function applyTheme(t, announce) {
+    theme = THEMES.includes(t) ? t : 'system';
+    const root = document.documentElement;
+    if (theme === 'system') root.removeAttribute('data-theme'); else root.setAttribute('data-theme', theme);
+    const b = $('#themeBtn');
+    if (b) {
+      b.innerHTML = THEME_ICON[theme];
+      b.setAttribute('aria-label', `Color theme: ${THEME_LABEL[theme]}. Click to change.`);
+      b.title = `Theme: ${THEME_LABEL[theme]} (T)`;
+    }
+    const dark = theme === 'dark' || (theme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
+    const meta = document.querySelector('meta[name="theme-color"]'); if (meta) meta.content = dark ? '#0f1412' : '#0b5d47';
+    try { localStorage.setItem(TKEY, theme); } catch (e) { /* ignore */ }
+    if (announce) toast(`Theme: ${THEME_LABEL[theme]}`);
+  }
+  const nextTheme = () => applyTheme(THEMES[(THEMES.indexOf(theme) + 1) % THEMES.length], true);
+  $('#themeBtn').addEventListener('click', nextTheme);
+  applyTheme(theme);
+
   /* ---------- Simple / Pro ---------- */
   /* Every visit opens in Standard view. Beginner and Pro are opt-in for this visit only. */
   let mode = 'standard';
@@ -2036,6 +2069,7 @@ table.sens td.cur { outline: 2px solid var(--ink); outline-offset: -2px; font-we
     c.push({ g: 'Tools', t: 'Sensitivity table', run: () => { applyMode('pro'); switchTab('cap'); const el = $('#sensCard'); if (el) el.scrollIntoView({ block: 'start' }); } });
     c.push({ g: 'Learn', t: 'Take the 8-lesson course', run: () => startCourse() });
     [['beginner', 'Beginner'], ['standard', 'Standard'], ['pro', 'Pro']].filter(([m]) => m !== mode).forEach(([m, t]) => c.push({ g: 'View', t: `Switch to ${t} view`, k: m === 'pro' ? 'P' : '', run: () => applyMode(m, true) }));
+    THEMES.filter(t => t !== theme).forEach(t => c.push({ g: 'Theme', t: `Switch to ${THEME_LABEL[t].toLowerCase() === 'match my device' ? 'device' : THEME_LABEL[t].toLowerCase()} theme`, k: 'T', run: () => applyTheme(t, true) }));
     c.push({ g: 'Scenario', t: 'Save scenario', k: '⌘S', run: openSave });
     c.push({ g: 'Scenario', t: 'Start blank', run: () => loadPreset('blank') });
     Object.entries(PRESETS).filter(([k]) => k !== 'blank').forEach(([k, p]) => c.push({ g: 'Example', t: p.label, run: () => loadPreset(k) }));
@@ -2097,6 +2131,7 @@ table.sens td.cur { outline: 2px solid var(--ink); outline-offset: -2px; font-we
     if (e.key === '?') { e.preventDefault(); openKeys(); }
     else if (['1', '2', '3', '4'].includes(e.key)) switchTab(['cap', 'exit', 'run', 'cmp'][+e.key - 1]);
     else if (k === 'p') applyMode(mode === 'pro' ? 'standard' : 'pro', true);
+    else if (k === 't') nextTheme();
   });
 
   /* ---------- render ---------- */

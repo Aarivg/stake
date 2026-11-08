@@ -1,3 +1,5 @@
+#themeBtn { display: inline-grid; place-items: center; }
+
 /* Large screens: scale the whole app up instead of leaving wide empty margins.
    --z is reused to keep the sticky inputs column within the viewport. */
 .app { max-width: 1360px; zoom: var(--z, 1); }
