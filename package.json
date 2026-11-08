@@ -1,0 +1,14 @@
+{
+  "name": "stake",
+  "version": "1.0.0",
+  "description": "Cap table, SAFE and exit simulator for founders. One static page, no dependencies.",
+  "license": "MIT",
+  "author": "Aariv Gupta",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build.js",
+    "test": "node --test",
+    "start": "npm run build && npx --yes serve ."
+  },
+  "engines": { "node": ">=18" }
+}
