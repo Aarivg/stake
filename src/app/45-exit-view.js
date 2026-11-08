@@ -12,13 +12,12 @@
     if (ui.exit == null || !isFinite(ui.exit)) ui.exit = Math.round(sc.post * 1.5 / 1e6) * 1e6 || 1e6;
     const ex = ui.exit;
     const pos = Math.round(Math.sqrt(Math.min(1, ex / sc.xmax)) * 1000);
-    let h = ui.challenge ? `<div class="challenge" id="challengeCard">${challengeCard()}</div>` : '';
-    h += stages.length > 1 && !ui.challenge ? stageChips(si, 'xstage', 1) : '';
+    let h = stages.length > 1 ? stageChips(si, 'xstage', 1) : '';
     h += `<div class="exit-ctl"><div><label class="field" for="exitRange"><span>Exit value ${q('exit')}</span></label>
         <input type="range" id="exitRange" min="0" max="1000" step="1" value="${pos}">
         <div class="scale"><span>$0</span><span>${money(sc.xmax / 4)}</span><span>${money(sc.xmax)}</span></div></div>
       <div><div class="big2" id="exitBig">${money(ex)}</div><label class="field" style="margin-top:6px"><span>Type an exit</span><input class="num" type="text" id="exitInput" inputmode="decimal" value="${esc(moneyInput(ex))}" autocomplete="off"></label></div></div>`;
-    h += `<div id="exitBody" class="${ui.challenge && !ui.challenge.revealed ? 'veiled' : ''}" style="display:flex;flex-direction:column;gap:18px">${exitBody(st, sc)}</div>`;
+    h += `<div id="exitBody" style="display:flex;flex-direction:column;gap:18px">${exitBody(st, sc)}</div>`;
     return h;
   }
   function exitBody(st, sc) {
@@ -48,7 +47,6 @@
     const st = model.stages[exitIdx()];
     $('#exitBody').innerHTML = exitBody(st, exitScale(st));
     $('#exitBig').textContent = money(ui.exit);
-    if (ui.challenge) updateChallenge();
     courseCheck();
   }
 

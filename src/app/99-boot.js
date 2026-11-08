@@ -11,7 +11,6 @@
     if (state.savedId && !saved.some(x => x.id === state.savedId)) delete state.savedId;
     if (valid(h)) { delete state.savedId; dirty = true; }
     if (!ui.seek) ui.seek = { target: 50, roundId: null, varKey: '' };
-    ui.challenge = null;
     applyMode(mode);
     bumpIds();
     renderInputs(); renderOutputs(); renderScenarioSelect(); updateSaveUi(); histInit();

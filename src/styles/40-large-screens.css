@@ -13,11 +13,27 @@
 @media (min-width: 3200px) { :root { --z: 2; } }
 @media print { .app, .course { zoom: 1; } }
 
-/* Founder challenge (#challenge link) */
-.challenge { background: var(--sheet); border: 2px solid var(--accent); border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; }
+
+/* Founder challenge tab */
+.challenge { background: var(--sheet); border: 2px solid var(--accent); border-radius: 12px; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px; }
+.challenge.quiet { border: 1px solid var(--rule); }
 .challenge .step { font: 500 11px var(--font-mono); color: var(--accent); letter-spacing: .08em; text-transform: uppercase; }
-.challenge h3 { margin: 0; font-family: var(--font-display); font-size: 26px; line-height: 1.12; letter-spacing: -0.015em; font-variation-settings: "wdth" 85; text-wrap: balance; }
-.challenge p { margin: 0; font-size: 14.5px; max-width: 70ch; }
+.challenge h3 { margin: 0; font-family: var(--font-display); font-size: 28px; line-height: 1.12; letter-spacing: -0.015em; font-variation-settings: "wdth" 85; text-wrap: balance; }
+.challenge.quiet h3 { font-size: 20px; }
+.challenge p { margin: 0; font-size: 14.5px; max-width: 72ch; }
 .challenge .win { color: var(--good-ink); }
-#exitBody.veiled { filter: blur(18px); opacity: .5; pointer-events: none; user-select: none; }
-@media (prefers-reduced-motion: no-preference) { #exitBody { transition: filter .35s ease; } }
+.ch-guess { display: flex; gap: 10px; align-items: end; flex-wrap: wrap; }
+.ch-guess .field { width: 200px; }
+.ch-answer { display: flex; align-items: baseline; gap: 14px; }
+.ch-answer .k { font: 500 12px var(--font-mono); color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.ch-answer .v { font-family: var(--font-display); font-weight: 800; font-size: 72px; line-height: 1; letter-spacing: -0.04em; color: var(--crit-ink); font-variation-settings: "wdth" 78; }
+.ch-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: center; margin: 4px 0; }
+.ch-k { font-size: 13px; color: var(--ink-2); }
+.ch-bar { display: flex; gap: 2px; height: 30px; border-radius: 6px; overflow: hidden; }
+.ch-slider input { width: 100%; accent-color: var(--accent); }
+#chLive { display: flex; flex-direction: column; gap: 10px; }
+@media (max-width: 560px) { .ch-row { grid-template-columns: 1fr; gap: 4px; } .ch-answer .v { font-size: 56px; } }
+/* The challenge gets the whole page: no hero, no inputs panel */
+body.on-challenge .hero, body.on-challenge .inputs { display: none; }
+body.on-challenge .grid { grid-template-columns: minmax(0, 1fr); }
+body.on-challenge .outputs { width: 100%; max-width: 960px; margin: 0 auto; }

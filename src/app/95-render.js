@@ -5,8 +5,9 @@
     const v = $('#view');
     const active = document.activeElement && document.activeElement.id;
     const caret = active && document.activeElement.selectionStart;
-    const errs = (model.errors || []).map(x => ins(`<b>${esc(x.name)}:</b> ${esc(x.msg)} Results below stop before this round.`, 'crit', '!')).join('');
-    v.innerHTML = errs + (ui.tab === 'exit' ? viewExit() : ui.tab === 'run' ? viewRun() : ui.tab === 'cmp' ? viewCompare() : viewCap());
+    document.body.classList.toggle('on-challenge', ui.tab === 'challenge');
+    const errs = ui.tab === 'challenge' ? '' : (model.errors || []).map(x => ins(`<b>${esc(x.name)}:</b> ${esc(x.msg)} Results below stop before this round.`, 'crit', '!')).join('');
+    v.innerHTML = errs + (ui.tab === 'exit' ? viewExit() : ui.tab === 'run' ? viewRun() : ui.tab === 'cmp' ? viewCompare() : ui.tab === 'challenge' ? viewChallenge() : viewCap());
     if (active && v.querySelector('#' + active)) {
       const el = document.getElementById(active); el.focus();
       try { if (caret != null) el.setSelectionRange(caret, caret); } catch (e) { /* not a text input */ }
@@ -46,7 +47,6 @@
   });
   $('#view').addEventListener('input', e => {
     const t = e.target;
-    if ((t.id === 'exitRange' || t.id === 'exitInput') && ui.challenge && !ui.challenge.revealed) ui.challenge.revealed = true;
     if (t.id === 'exitRange') {
       const sc = exitScale(model.stages[exitIdx()]);
       const f = +t.value / 1000, raw = sc.xmax * f * f;

@@ -2,7 +2,7 @@
   function switchTab(t) { ui.tab = t; renderView(); save(); }
   function commands() {
     const c = [];
-    [['cap', 'Cap table'], ['exit', 'Exit waterfall'], ['run', 'Runway'], ['cmp', 'Compare scenarios']].forEach(([k, t], i) => c.push({ g: 'Go to', t, k: String(i + 1), run: () => switchTab(k) }));
+    [['cap', 'Cap table'], ['exit', 'Exit waterfall'], ['run', 'Runway'], ['cmp', 'Compare scenarios'], ['challenge', 'Founder challenge']].forEach(([k, t], i) => c.push({ g: 'Go to', t, k: String(i + 1), run: () => switchTab(k) }));
     c.push({ g: 'Add', t: 'Add a SAFE or note', run: () => { if (course) endCourse(false); document.querySelector('[data-act="add-inst"]').click(); } });
     c.push({ g: 'Add', t: 'Add a priced round', run: () => { const b = document.querySelector('[data-act="add-round"]'); if (b) b.click(); else toast('Eight rounds is the maximum.'); } });
     c.push({ g: 'Add', t: 'Add a shareholder', run: () => document.querySelector('[data-act="add-holder"]').click() });
@@ -70,7 +70,7 @@
     if (mod || e.altKey || (tg && (/^(INPUT|SELECT|TEXTAREA)$/.test(tg.tagName) || tg.isContentEditable))) return;
     if (!$('#palette').hidden || !$('#keys').hidden) return;
     if (e.key === '?') { e.preventDefault(); openKeys(); }
-    else if (['1', '2', '3', '4'].includes(e.key)) switchTab(['cap', 'exit', 'run', 'cmp'][+e.key - 1]);
+    else if (['1', '2', '3', '4', '5'].includes(e.key)) switchTab(['cap', 'exit', 'run', 'cmp', 'challenge'][+e.key - 1]);
     else if (k === 'p') applyMode(mode === 'pro' ? 'standard' : 'pro', true);
     else if (k === 't') nextTheme();
   });
